@@ -4,14 +4,14 @@
             <div><Strong>Имя:</Strong> {{ post.title }}</div>
             <div><Strong>Текст:</Strong> {{ post.body }}</div>
         </div>
-        <div class="post--btns">
-            <VButton>Удалить</VButton>
+        <div>
+            <VButton @click="$emit('remove', post)">Удалить</VButton>
         </div>
     </div>
 </template>
 
 <script>
-export default { 
+export default {
     props: {
         post: {
             type: Object,
@@ -23,9 +23,12 @@ export default {
 
 <style scoped>
 .post {
-    padding: 15px;
-    border: 2px solid teal;
+    padding: 30px;
     margin-top: 15px;
+
+    border: 2px solid teal;
+    border-radius: 50px;
+    
     display: flex;
     align-items: center;
     justify-content: space-between;

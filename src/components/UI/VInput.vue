@@ -1,26 +1,35 @@
 <template>
-    <input :value="modelValue" @input="updateInput" class="input" type="text">
+  <input v-model="value" class="input" type="text">
 </template>
 
-<script>
-export default {
-    name: 'VInput',
-    props: {
-      modelValue: [String, Number]
+<script setup>
+import { computed } from 'vue';
+
+defineOptions({
+  name: 'VInput',
+})
+const emit = defineEmits(['update:modelValue'])
+
+const props = defineProps({
+  modelValue: [String, Number]
+})
+const value = computed({
+    get() {
+        return props.modelValue
     },
-    methods: {
-      updateInput(event) {
-        this.$emit('update:modelValue', event.target.value)
-      }
-    }
-  }
+    set(value) {
+        emit('update:modelValue', value)
+    },
+})
 </script>
 
 <style scoped>
-.imput {
-    width: 100%;
-    border: 1px solid teal;
-    padding: 10px 15px;
-    margin-top: 15px;
+.input {
+  width: 100%;
+  padding: 15px;
+  margin-top: 15px;
+
+  border-radius: 20px;
+  border: 1px solid teal; 
 }
 </style>
