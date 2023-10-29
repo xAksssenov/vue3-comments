@@ -1,4 +1,4 @@
-import VButton from "@/components/UI/VButton.vue"
-import VInput from "@/components/UI/VInput.vue"
+import VButton from '@/components/UI/VButton';
+import VInput from '@/components/UI/VInput';
 
-export default [VInput, VButton]
+export default [VButton, VInput]
