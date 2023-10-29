@@ -12,6 +12,7 @@ defineOptions({
 
 <style scoped>
 .btn {
+    font-size: 20px;
     padding: 10px 15px;
     align-self: flex-end;
 

@@ -19,7 +19,7 @@ const value = computed({
     },
     set(value) {
         emit('update:modelValue', value)
-    },
+    }
 })
 </script>
 
@@ -28,8 +28,9 @@ const value = computed({
   width: 100%;
   padding: 15px;
   margin-top: 15px;
+  font-size: 20px;
 
   border-radius: 20px;
-  border: 1px solid teal; 
+  border: 2px solid rgb(209, 59, 25);
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <textarea name="textareaName" class="area" v-model="value"></textarea>
+    <textarea class="area" v-model="value"></textarea>
 </template>
 
 <script setup>
@@ -9,8 +9,7 @@ defineOptions({
 })
 const emit = defineEmits(['update:modelValue'])
 const props = defineProps({
-    textareaName: String,
-    modelValue: String,
+    modelValue: [String, Number]
 })
 const value = computed({
     get() {
@@ -26,11 +25,13 @@ const value = computed({
 .area {
     width: 100%;
     height: 200px;
+    font-size: 20px;
+    
     resize: none;
     padding: 10px 15px;
     margin-top: 15px;
 
-    border: 1px solid teal;
+    border: 2px solid rgb(209, 59, 25);
     border-radius: 20px;
 }
 </style>

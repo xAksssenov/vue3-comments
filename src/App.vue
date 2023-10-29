@@ -1,30 +1,28 @@
 <template>
-  <div class="app">
-    <h1 class="text-main">Страница с комментариями</h1>
+  <main>
+    <section class="app">
+      <h1 class="text-main">Страница с комментариями</h1>
 
-    <div class="btn-flex">
-      <VButton @click="showDialog" class="main-btn">Создать пост</VButton>
-    </div>
+      <div class="btn-flex">
+        <VButton @click="showDialog" class="main-btn">Создать комментарий</VButton>
+      </div>
 
-    <VDialog :show="dialogVisible">
-      <PostForm @create="createPost" />
-    </VDialog>
-    <PostList :posts="posts" />
-  </div>
+      <VDialog :show="dialogVisible">
+        <PostForm @create="createPost" :parentPostId="parentPostId" :visible="dialogVisible" />
+      </VDialog>
+      <PostList :posts="posts" @reply="showReplyDialog" />
+    </section>
+  </main>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import PostForm from './components/PostForm.vue'
 import PostList from './components/PostList.vue'
-
+const parentPostId = ref(null)
 const dialogVisible = ref(false)
 
-const posts = ref([
-  { id: 1, title: 'Иван', body: 'something' },
-  { id: 2, title: 'Олег', body: 'something' },
-  { id: 3, title: 'Виктор', body: 'something' }
-])
+const posts = ref([])
 
 function createPost(post) {
   posts.value.push(post)
@@ -32,6 +30,12 @@ function createPost(post) {
 }
 
 function showDialog() {
+  parentPostId.value = null
+  dialogVisible.value = true
+}
+
+function showReplyDialog(parentId) {
+  parentPostId.value = parentId
   dialogVisible.value = true
 }
 

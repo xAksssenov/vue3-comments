@@ -34,30 +34,46 @@
 <script setup>
 import { ref, computed } from 'vue'
 
+const emit = defineEmits(['create'])
+
+const props = defineProps({
+    parentPostId: {
+        type: Number,
+        defualt: null,
+    },
+    visible: {
+        type: Boolean,
+    }
+})
+
 const post = ref({
     title: '',
-    body: ''
+    body: '',
+    parentId: null
 })
+
 const titleLength = computed(() => {
     return post.value.title.length
 })
+
 const bodyLength = computed(() => {
     return post.value.body.length
 })
-const emit = defineEmits(['create'])
 
 function createPost() {
     post.value = {
         title: post.value.title,
         body: post.value.body,
-        id: Date.now()
+        parentId: props.parentPostId,
     }
     emit('create', post.value)
     post.value = {
         title: '',
         body: '',
-        id: null,
+        reaction: 0,
+        parentId: null,
     }
+    console.log(post);
 }
 </script>
   
@@ -76,6 +92,8 @@ function createPost() {
     text-align: center;
     font-weight: 600;
     margin-top: 20px;
+    font-size: 20px;
+
     color: rgb(211, 94, 94);
 }
 
