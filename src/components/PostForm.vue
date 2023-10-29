@@ -9,26 +9,28 @@
     </form>
 </template>
   
-<script>
-export default {
-    data() {
-        return {
-            post: {
-                title: '',
-                body: ''
-            }
-        }
-    },
-    methods: {
-        createPost() {
-            this.post.id = Date.now();
-            this.$emit('create', this.post)
-            this.post = {
-                title: '',
-                body: ''
-            }
-        }
-    },
+<script setup>
+import { ref } from 'vue'
+
+const post = ref({
+    title: '',
+    body: ''
+})
+
+const emit = defineEmits(['create'])
+
+function createPost() {
+    post.value = {
+        title: post.value.title,
+        body: post.value.body,
+        id: Date.now()
+    }
+    emit('create', post.value)
+    post.value = {
+        title: '',
+        body: '',
+        id: null,
+    }
 }
 </script>
   

@@ -2,50 +2,39 @@
   <div class="app">
     <h1 class="text-main">Страница с комментариями</h1>
 
-    <div style="display: flex;">
+    <div class="btn-flex">
       <VButton @click="showDialog" class="main-btn">Создать пост</VButton>
     </div>
 
-    <VDialog v-model:show="dialogVisible">
-      <post-form @create="createPost" />
+    <VDialog :show="dialogVisible">
+      <PostForm @create="createPost" />
     </VDialog>
-    <post-list :posts="posts" @remove="removePost" />
+    <PostList :posts="posts" />
   </div>
 </template>
 
-<script>
-
+<script setup>
+import { ref } from 'vue'
 import PostForm from './components/PostForm.vue'
 import PostList from './components/PostList.vue'
 
-export default {
-  components: {
-    PostForm,
-    PostList
-  },
-  data() {
-    return {
-      posts: [
-        { id: 1, title: 'Иван', body: 'something' },
-        { id: 2, title: 'Олег', body: 'something' },
-        { id: 3, title: 'Виктор', body: 'something' }
-      ],
-      dialogVisible: false,
-    }
-  },
-  methods: {
-    createPost(post) {
-      this.posts.push(post)
-      this.dialogVisible = false
-    },
-    removePost(post) {
-      this.posts = this.posts.filter(p => p.id !== post.id)
-    },
-    showDialog() {
-      this.dialogVisible = true
-    }
-  }
+const dialogVisible = ref(false)
+
+const posts = ref([
+  { id: 1, title: 'Иван', body: 'something' },
+  { id: 2, title: 'Олег', body: 'something' },
+  { id: 3, title: 'Виктор', body: 'something' }
+])
+
+function createPost(post) {
+  posts.value.push(post)
+  dialogVisible.value = false
 }
+
+function showDialog() {
+  dialogVisible.value = true
+}
+
 </script>
 
 <style>
@@ -86,5 +75,9 @@ export default {
   margin: 15px auto;
   justify-content: space-between;
   width: 30%;
+}
+
+.btn-flex {
+  display: flex;
 }
 </style>  

@@ -15,11 +15,11 @@ defineOptions({
     padding: 10px 15px;
     align-self: flex-end;
 
-    border: 1px solid teal;
     border-radius: 20px;
 
-    background: none;
-    color: teal;
+    color: white;
+    background: rgb(206, 104, 104);
+    border: none;
 }
 
 .btn:hover {
