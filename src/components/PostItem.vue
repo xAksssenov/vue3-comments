@@ -1,8 +1,8 @@
 <template>
     <div class="post">
         <div>
-            <div><Strong>Имя:</Strong> {{ post.title }}</div>
-            <div><Strong>Текст:</Strong> {{ post.body }}</div>
+            <div><Strong> {{ post.title }} </Strong></div>
+            <div> {{ post.body }} </div>
         </div>
         <div>
             <VButton @click="showDialog">Ответить</VButton>
@@ -11,14 +11,15 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 const props = defineProps({
     post: {
         type: Object,
         required: true
     }
 })
-
+const emit = defineEmits(['showDialog'])
+const date = ref(props.post.createdAt)
 const convertDate = computed(() => {
     return new Intl.DateTimeFormat('ru', {
         year: 'numeric',
@@ -30,7 +31,7 @@ const convertDate = computed(() => {
 })
 
 function showDialog() {
-    emit('showDialog', props.comment.id)
+    emit('showDialog', props.post.id)
 }
 </script>
 
@@ -46,8 +47,9 @@ function showDialog() {
     align-items: center;
     justify-content: space-between;
 }
+
 .time {
-  margin-left: auto;
-  line-height: 1;
+    margin-left: auto;
+    line-height: 1;
 }
 </style>
