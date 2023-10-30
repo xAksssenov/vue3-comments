@@ -1,44 +1,64 @@
 <template>
   <main>
     <section class="app">
-      <h1 class="text-main">Страница с комментариями</h1>
-
-      <div class="btn-flex">
-        <VButton @click="showDialog" class="main-btn">Создать комментарий</VButton>
+      <h1 class="app__main">Страница с комментариями</h1>
+      <div class="app__btn">
+        <VButton @click="showDialog" class="app__main__btn">Создать комментарий</VButton>
       </div>
 
-      <VDialog :show="dialogVisible">
-        <PostForm @create="createPost" :parentPostId="parentPostId" :visible="dialogVisible" />
+      <VDialog v-model:show="dialogVisible">
+        <CommentForm @create="createComment" :parentCommentId="parentCommentId" :visible="dialogVisible" />
       </VDialog>
-      <PostList :posts="posts" @reply="showReplyDialog" />
+
+      <h3 v-if="comments.length > 0" class="app__empti">Список комментариев:</h3>
+
+      <CommentList :comments="comments" @reply="showReplyDialog" />
     </section>
   </main>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import PostForm from './components/PostForm.vue'
-import PostList from './components/PostList.vue'
-const parentPostId = ref(null)
+import CommentForm from './components/CommentForm.vue'
+import CommentList from './components/CommentList.vue'
+const parentCommentId = ref(null)
 const dialogVisible = ref(false)
 
-const posts = ref([])
+const comments = ref([
+  {
+    id: 1,
+    author: "Иван",
+    text: "текст",
+    parentId: null
+  },
+  {
+    id: 2,
+    author: "sdfsdf",
+    text: "текст",
+    parentId: null
+  },
+  {
+    id: 3,
+    author: "ssdfsdfsdgfghfghf",
+    text: "текст",
+    parentId: null
+  }
+])
 
-function createPost(post) {
-  posts.value.push(post)
-  dialogVisible.value = false
+function showReplyDialog(parentId) {
+  parentCommentId.value = parentId
+  dialogVisible.value = true
 }
 
 function showDialog() {
-  parentPostId.value = null
+  parentCommentId.value = null
   dialogVisible.value = true
 }
 
-function showReplyDialog(parentId) {
-  parentPostId.value = parentId
-  dialogVisible.value = true
+function createComment(comment) {
+  comments.value.push(comment)
+  dialogVisible.value = false
 }
-
 </script>
 
 <style>
@@ -57,11 +77,11 @@ function showReplyDialog(parentId) {
   margin: auto;
 }
 
-.text-main {
+.app__main {
   text-align: center;
 }
 
-.text-main:after {
+.app__main:after {
   content: '';
   width: 100%;
   display: block;
@@ -71,17 +91,19 @@ function showReplyDialog(parentId) {
   background: black;
 }
 
-.active {
-  background-color: aqua;
+.app__empti {
+  font-size: 25px;
+  text-align: center;
+  color: red;
 }
 
-.main-btn {
+.app__main__btn {
   margin: 15px auto;
   justify-content: space-between;
   width: 30%;
 }
 
-.btn-flex {
+.app__btn {
   display: flex;
 }
 </style>  

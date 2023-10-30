@@ -1,0 +1,119 @@
+<template>
+    <li class="comment" :style="{ 'margin-left': nestMargin + 'px' }">
+
+        <div class="comment__body">
+            <div>
+                <p><Strong> {{ comment.author }} </Strong></p>
+                <p> {{ comment.text }} </p>
+            </div>
+
+            <div class="comment__section">
+                <time>{{ dateNow }}</time>
+                <VButton class="comment__btn" @click="showDialog">Ответить</VButton>
+
+                <div class="comment__answer" v-if="comment.childs">
+                    Ответы: {{ comment.childs.length }}
+                </div>
+            </div>
+
+        </div>
+
+        <VDialog v-model:show="dialogVisible">
+            <CommentForm :visible="dialogVisible" :parentCommentId="comment.id" @create="createChildComment" />
+        </VDialog>
+
+        <ul v-if="comment.childs">
+            <CommentItem v-for="child in comment.childs" :comment="child" :childs="child.childs"
+                @showDialog="showChildDialog" :nest="child.nest" :key="child.id" />
+        </ul>
+    </li>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue';
+import CommentForm from './CommentForm.vue';
+const dialogVisible = ref(false)
+
+const emit = defineEmits(['showDialog'])
+const props = defineProps({
+    comment: {
+        typeof: Object,
+        required: true
+    },
+    nest: {
+        type: Number,
+        default: 0,
+    }
+})
+
+function showDialog() {
+    emit('showDialog', props.comment.id)
+}
+
+function showChildDialog(commentId) {
+    emit('showDialog', commentId)
+}
+
+const nestMargin = computed(() => {
+    return props.comment.nest * 50
+})
+
+function createChildComment(newComment) {
+    if (!props.comment.childs) {
+        props.comment.childs = []
+    }
+    newComment.id = Date.now()
+    newComment.nest = props.comment.nest + 1
+
+    props.comment.childs.push(newComment)
+    dialogVisible.value = false
+}
+
+function dateTime() {
+    const current = new Date()
+    const date = current.getFullYear() + '-' + (current.getMonth() + 1) + '-' + current.getDate();
+    const time = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
+    const dateTime = date + ' ' + time;
+    return dateTime;
+}
+
+const dateNow = dateTime()
+</script>
+
+<style scoped>
+.comment__body {
+    font-size: 20px;
+    padding: 40px 20px;
+    margin-top: 15px;
+
+    border: 2px solid rgb(209, 59, 25);
+    border-radius: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+time {
+    color: grey;
+}
+
+.comment__answer {
+    color: rgb(76, 144, 124);
+}
+
+.comment__btn {
+    width: 100%;
+}
+
+li {
+    list-style-type: none;
+}
+
+.comment__section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+}
+</style>

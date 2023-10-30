@@ -1,6 +1,6 @@
 <template>
     <div class="dialog" v-if="show" @mousedown="$emit('update:show', false)">
-        <div @mousedown.stop class="dialog-content">
+        <div @mousedown.stop class="dialog__content">
             <slot></slot>
         </div>
     </div>
@@ -10,13 +10,13 @@
 defineOptions({
     name: 'VDialog',
 })
-defineEmits(['update:show'])
+
 const props = defineProps({
-    show: {
-        type: Boolean,
-        default: false,
-    },
+    show: Boolean
 })
+
+const emit = defineEmits(['update:show'])
+
 </script>
 
 <style scored>
@@ -32,7 +32,7 @@ const props = defineProps({
     background: rgba(0, 0, 0, 0.6);
 }
 
-.dialog-content {
+.dialog__content {
     margin: auto;
     padding: 20px;
     border-radius: 20px;
