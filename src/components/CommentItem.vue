@@ -19,12 +19,13 @@
         </div>
 
         <VDialog v-model:show="dialogVisible">
-            <CommentForm :visible="dialogVisible" :parentCommentId="comment.id" @create="createChildComment" />
+            <CommentForm :visible="dialogVisible" :parentCommentId="comment.id" :nest="comment.nest + 1"
+                @create="createChildComment" />
         </VDialog>
 
         <ul v-if="comment.childs">
-            <CommentItem v-for="child in comment.childs" :comment="child" :childs="child.childs"
-                @showDialog="showChildDialog" :nest="child.nest" :key="child.id" />
+            <CommentItem v-for="child in comment.childs" :comment="child" @showDialog="showReplyFormForChild"
+                :nest="child.nest" :key="child.id" />
         </ul>
     </li>
 </template>
@@ -47,11 +48,12 @@ const props = defineProps({
 })
 
 function showDialog() {
-    emit('showDialog', props.comment.id)
+    dialogVisible.value = true
 }
 
-function showChildDialog(commentId) {
-    emit('showDialog', commentId)
+function showReplyFormForChild(childCommentId) {
+    dialogVisible.value = true
+    emit('showDialog', childCommentId);
 }
 
 const nestMargin = computed(() => {
