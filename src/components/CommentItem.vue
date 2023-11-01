@@ -1,7 +1,7 @@
 <template>
     <li class="comment" :style="{ 'margin-left': nestMargin + 'px' }">
 
-        <div class="comment__body">
+        <div class="comment__body" :class="colorReaction">
             <div>
                 <p><Strong> {{ comment.author }} </Strong></p>
                 <p> {{ comment.text }} </p>
@@ -15,7 +15,6 @@
                     Ответы: {{ comment.childs.length }}
                 </div>
             </div>
-
         </div>
 
         <VDialog v-model:show="dialogVisible">
@@ -40,11 +39,29 @@ const props = defineProps({
     comment: {
         typeof: Object,
         required: true
+    }, childs: {
+        typeof: Array,
     },
     nest: {
-        type: Number,
-        default: 0,
+        typeof: Number,
+        required: true,
     }
+})
+
+const reactionSum = ref(0)
+const colorReaction = computed(() => {
+    if (!props.comment.childs) return
+
+    reactionSum.value = 0
+    props.comment.childs.forEach((comment) => {
+        reactionSum.value += comment.reaction
+    })
+    if (reactionSum.value > 0) {
+        return 'comment__green'
+    } else if (reactionSum.value < 0) {
+        return 'comment__red'
+    }
+    return
 })
 
 function showDialog() {
@@ -83,6 +100,14 @@ const dateNow = dateTime()
 </script>
 
 <style scoped>
+.comment__green {
+    background-color: rgba(33, 230, 131, 0.322);
+}
+
+.comment__red {
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
 .comment__body {
     font-size: 20px;
     padding: 40px 20px;

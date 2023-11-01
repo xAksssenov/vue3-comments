@@ -29,18 +29,21 @@ const comments = ref([
     id: 1,
     author: "Иван",
     text: "текст",
+    reaction: 0,
     parentId: null
   },
   {
     id: 2,
     author: "sdfsdf",
     text: "текст",
+    reaction: 0,
     parentId: null
   },
   {
     id: 3,
     author: "ssdfsdfsdgfghfghf",
     text: "текст",
+    reaction: 0,
     parentId: null
   }
 ])
@@ -68,7 +71,6 @@ function createComment(comment) {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: rgb(240, 236, 231);
 }
 
 .app {
