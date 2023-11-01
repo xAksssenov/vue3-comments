@@ -5,7 +5,7 @@
 <script setup>
 import { computed } from 'vue'
 defineOptions({
-    name: 'VTextarea',
+    name: 'VTextarea'
 })
 const emit = defineEmits(['update:modelValue'])
 const props = defineProps({

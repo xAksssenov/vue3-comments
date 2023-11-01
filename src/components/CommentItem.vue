@@ -3,7 +3,7 @@
 
         <div class="comment__body" :class="colorReaction">
             <div>
-                <p><Strong> {{ comment.author }} </Strong></p>
+                <p><strong> {{ comment.author }} </strong></p>
                 <p> {{ comment.text }} </p>
             </div>
 
@@ -11,35 +11,29 @@
                 <time>{{ dateNow }}</time>
                 <VButton class="comment__btn" @click="showDialog">Ответить</VButton>
 
-                <div class="comment__answer" v-if="comment.childs">
-                    Ответы: {{ comment.childs.length }}
+                <div class="comment__answer" v-if="childs">
+                    Ответы: {{ childs.length }}
                 </div>
             </div>
         </div>
 
-        <VDialog v-model:show="dialogVisible">
-            <CommentForm :visible="dialogVisible" :parentCommentId="comment.id" :nest="comment.nest + 1"
-                @create="createChildComment" />
-        </VDialog>
-
-        <ul v-if="comment.childs">
-            <CommentItem v-for="child in comment.childs" :comment="child" @showDialog="showReplyFormForChild"
-                :nest="child.nest" :key="child.id" />
+        <ul v-if="childs">
+            <CommentItem @showDialog="showChildDialog" v-for="child in childs" :comment="child"
+                :childs="child.childs" :nest="child.nest" :key="child.id" />
         </ul>
     </li>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
-import CommentForm from './CommentForm.vue';
-const dialogVisible = ref(false)
 
 const emit = defineEmits(['showDialog'])
 const props = defineProps({
     comment: {
         typeof: Object,
         required: true
-    }, childs: {
+    },
+    childs: {
         typeof: Array,
     },
     nest: {
@@ -65,28 +59,16 @@ const colorReaction = computed(() => {
 })
 
 function showDialog() {
-    dialogVisible.value = true
+    emit('showDialog', props.comment.id)
 }
 
-function showReplyFormForChild(childCommentId) {
-    dialogVisible.value = true
-    emit('showDialog', childCommentId);
+function showChildDialog(id) {
+    emit('showDialog', id)
 }
 
 const nestMargin = computed(() => {
-    return props.comment.nest * 50
+    return props.comment.nest * 30
 })
-
-function createChildComment(newComment) {
-    if (!props.comment.childs) {
-        props.comment.childs = []
-    }
-    newComment.id = Date.now()
-    newComment.nest = props.comment.nest + 1
-
-    props.comment.childs.push(newComment)
-    dialogVisible.value = false
-}
 
 function dateTime() {
     const current = new Date()

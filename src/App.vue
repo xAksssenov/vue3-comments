@@ -62,6 +62,7 @@ function createComment(comment) {
   comments.value.push(comment)
   dialogVisible.value = false
 }
+
 </script>
 
 <style>

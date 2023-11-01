@@ -21,8 +21,7 @@
         </div>
 
         <label class="form__label">
-            <input v-model="comment.reaction" type="radio" name="reaction" value="1" class="form__radio"
-                required />
+            <input v-model="comment.reaction" type="radio" name="reaction" value="1" class="form__radio" required />
             <svg class="form__img" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd"
                     d="M15.9 4.5C15.9 3 14.418 2 13.26 2c-.806 0-.869.612-.993 1.82-.055.53-.121 1.174-.267 1.93-.386 2.002-1.72 4.56-2.996 5.325V17C9 19.25 9.75 20 13 20h3.773c2.176 0 2.703-1.433 2.899-1.964l.013-.036c.114-.306.358-.547.638-.82.31-.306.664-.653.927-1.18.311-.623.27-1.177.233-1.67-.023-.299-.044-.575.017-.83.064-.27.146-.475.225-.671.143-.356.275-.686.275-1.329 0-1.5-.748-2.498-2.315-2.498H15.5S15.9 6 15.9 4.5zM5.5 10A1.5 1.5 0 0 0 4 11.5v7a1.5 1.5 0 0 0 3 0v-7A1.5 1.5 0 0 0 5.5 10z"
@@ -31,8 +30,7 @@
         </label>
 
         <label class="form__label">
-            <input v-model="comment.reaction" type="radio" name="reaction" value="0" class="form__radio"
-                required />
+            <input v-model="comment.reaction" type="radio" name="reaction" value="0" class="form__radio" required />
             <svg class="form__img" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M9 11C9.55228 11 10 10.5523 10 10C10 9.44772 9.55228 9 9 9C8.44772 9 8 9.44772 8 10C8 10.5523 8.44772 11 9 11Z"
@@ -50,8 +48,7 @@
         </label>
 
         <label class="form__label">
-            <input v-model="comment.reaction" type="radio" name="reaction" value="-1" class="form__radio"
-                required />
+            <input v-model="comment.reaction" type="radio" name="reaction" value="-1" class="form__radio" required />
             <svg class="form__img" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd"
                     d="M8.1 20.5c0 1.5 1.482 2.5 2.64 2.5.806 0 .869-.613.993-1.82.055-.53.121-1.174.267-1.93.386-2.002 1.72-4.56 2.996-5.325V8C15 5.75 14.25 5 11 5H7.227C5.051 5 4.524 6.432 4.328 6.964A15.85 15.85 0 0 1 4.315 7c-.114.306-.358.546-.638.82-.31.306-.664.653-.927 1.18-.311.623-.27 1.177-.233 1.67.023.299.044.575-.017.83-.064.27-.146.475-.225.671-.143.356-.275.686-.275 1.329 0 1.5.748 2.498 2.315 2.498H8.5S8.1 19 8.1 20.5zM18.5 15a1.5 1.5 0 0 0 1.5-1.5v-7a1.5 1.5 0 0 0-3 0v7a1.5 1.5 0 0 0 1.5 1.5z"
@@ -60,11 +57,11 @@
         </label>
 
         <span v-if="!authorLength || authorLength > 20 || !textLength">
-            <VButton class="forn__btn" @click="createComment" :disabled="true">Создать</VButton>
+            <VButton class="form__btn" @click="createComment" :disabled="true">Создать</VButton>
         </span>
 
         <span v-else>
-            <VButton class="forn__btn active" @click="createComment" :disabled="false">Создать</VButton>
+            <VButton class="form__btn active" @click="createComment" :disabled="false">Создать</VButton>
         </span>
     </form>
 </template>
@@ -96,13 +93,14 @@ const textLength = computed(() => {
 })
 
 function createComment() {
-    comment.value = {
+    let childComment = {
+        id: Date.now(),
         author: comment.value.author,
         text: comment.value.text,
         reaction: +comment.value.reaction,
         parentId: props.parentCommentId
     }
-    emit('create', comment.value)
+    emit('create', childComment)
     comment.value = {
         author: '',
         text: '',
@@ -121,13 +119,13 @@ function createComment() {
     border-radius: 30px;
 }
 
-.forn__btn {
+.form__btn {
     width: 100%;
     margin-top: 15px;
     background: grey !important;
 }
 
-.forn__btn.active {
+.form__btn.active {
     background: rgb(206, 104, 104) !important;
 }
 

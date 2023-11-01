@@ -1,12 +1,12 @@
 <template>
-    <button class="btn">
+    <button type="button" class="btn">
         <slot></slot>
     </button>
 </template>
 
 <script setup>
 defineOptions({
-    name: 'VButton',
+    name: 'VButton'
 })
 </script>
 

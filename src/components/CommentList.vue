@@ -2,11 +2,11 @@
     <ul v-if="comments.length > 0">
 
         <TransitionGroup name="comment__list">
-            <CommentItem @showDialog="showReplyForm" v-for="comment in nestedComments" :comment="comment" :key="comment.id"
-                :nest="comment.nest" />
+            <CommentItem @showDialog="showReplyForm" v-for="comment in nestedComments" :comment="comment"
+                :childs="comment.childs" :nest="comment.nest" :key="comment.id" />
         </TransitionGroup>
     </ul>
-    <h2 v-else class="comment__empti">Список комментариев пуст</h2>
+    <h2 v-else class="comment__empty">Список комментариев пуст</h2>
 </template>
 
 <script setup>
@@ -50,7 +50,7 @@ function findChilds(parent, arr, nest) {
 </script>
 
 <style>
-.comment__empti {
+.comment__empty {
     font-size: 25px;
     text-align: center;
     color: red;

@@ -6,7 +6,7 @@
 import { computed } from 'vue';
 
 defineOptions({
-  name: 'VInput',
+  name: 'VInput'
 })
 const emit = defineEmits(['update:modelValue'])
 

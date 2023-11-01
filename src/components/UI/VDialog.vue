@@ -8,7 +8,7 @@
 
 <script setup>
 defineOptions({
-    name: 'VDialog',
+    name: 'VDialog'
 })
 
 const props = defineProps({
