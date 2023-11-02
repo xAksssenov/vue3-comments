@@ -6,19 +6,22 @@
         <VButton @click="showDialog" class="app__main__btn">Создать комментарий</VButton>
       </div>
 
+
       <VDialog v-model:show="dialogVisible">
         <CommentForm @create="createComment" :parentCommentId="parentCommentId" :visible="dialogVisible" />
       </VDialog>
 
-      <h3 v-if="comments.length > 0" class="app__empti">Список комментариев:</h3>
-
+      <h3 v-if="comments.length > 0" class="app__empty">Список комментариев:</h3>
+      <h3>
+        Количество комментариев: {{ lenghtComments }}
+      </h3>
       <CommentList :comments="comments" @reply="showReplyDialog" />
     </section>
   </main>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import CommentForm from './components/CommentForm.vue'
 import CommentList from './components/CommentList.vue'
 const parentCommentId = ref(null)
@@ -47,6 +50,8 @@ const comments = ref([
     parentId: null
   }
 ])
+
+const lenghtComments = computed(() => comments.value.length)
 
 function showReplyDialog(parentId) {
   parentCommentId.value = parentId
@@ -94,7 +99,7 @@ function createComment(comment) {
   background: black;
 }
 
-.app__empti {
+.app__empty {
   font-size: 25px;
   text-align: center;
   color: red;
