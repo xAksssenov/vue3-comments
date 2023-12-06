@@ -11,8 +11,8 @@ const routes = [
 console.log("Routes:", routes);
 
 const router = createRouter({
-    routes,
-    history: createWebHistory()
+  routes,
+  history: createWebHistory()
 })
 
 export default router

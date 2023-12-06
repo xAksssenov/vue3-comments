@@ -1,29 +1,29 @@
 <template>
-    <button type="button" class="btn">
-        <slot></slot>
-    </button>
+  <button type="button" class="btn">
+    <slot></slot>
+  </button>
 </template>
 
 <script setup>
 defineOptions({
-    name: 'VButton'
+  name: "VButton",
 })
 </script>
 
 <style scoped>
 .btn {
-    font-size: 20px;
-    padding: 10px 15px;
-    align-self: flex-end;
+  font-size: 20px;
+  padding: 10px 15px;
+  align-self: flex-end;
 
-    border-radius: 20px;
+  border-radius: 20px;
 
-    color: white;
-    background: rgb(206, 104, 104);
-    border: none;
+  color: white;
+  background: rgb(206, 104, 104);
+  border: none;
 }
 
 .btn:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 </style>

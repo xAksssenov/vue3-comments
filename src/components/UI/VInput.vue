@@ -1,25 +1,27 @@
 <template>
-  <input v-model="value" class="input" type="text">
+  <input v-model="value" class="input" type="text" />
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed } from "vue";
 
 defineOptions({
-  name: 'VInput'
+  name: "VInput",
 })
-const emit = defineEmits(['update:modelValue'])
+
+const emit = defineEmits(["update:modelValue"]);
 
 const props = defineProps({
-  modelValue: [String, Number]
+  modelValue: [String, Number],
 })
+
 const value = computed({
-    get() {
-        return props.modelValue
-    },
-    set(value) {
-        emit('update:modelValue', value)
-    }
+  get() {
+    return props.modelValue;
+  },
+  set(value) {
+    emit("update:modelValue", value);
+  },
 })
 </script>
 
