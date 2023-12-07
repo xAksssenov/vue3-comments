@@ -33,9 +33,8 @@ const emit = defineEmits(["update:check"]);
 
 .switch {
   cursor: pointer;
-  background-color: #928f8f;
-  transition: 0.4s;
-  border-radius: 34px;
+  background-color: #9d9b9b;
+  transition: .4s;
 }
 
 .switch:before {
@@ -47,7 +46,6 @@ const emit = defineEmits(["update:check"]);
   bottom: 4px;
   background-color: white;
   transition: 0.4s;
-  border-radius: 50%;
 }
 
 .switch__hidden {
@@ -55,7 +53,7 @@ const emit = defineEmits(["update:check"]);
 }
 
 .switch__hidden:checked + .switch {
-  background-color: #c6462c;
+  background-color: rgb(206, 104, 104);
 }
 
 .switch__hidden:checked + .switch:before {

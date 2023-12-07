@@ -6,8 +6,7 @@
         <h3>Новые комментарии в реальном времени</h3>
         <VSwitch
           class="comments__input"
-          :checked="switchChecked"
-          @check="streamComment"
+          v-model="switchChecked"
         />
       </div>
       <div class="app__btn">
@@ -17,9 +16,10 @@
       </div>
       <VDialog v-model:show="dialogVisible">
         <CommentForm
-          @create="createComment"
+          @create="postComments"
           :parentCommentId="parentCommentId"
           :visible="dialogVisible"
+          :sending="isAppSending"
         />
       </VDialog>
       <h3 v-if="comments.length > 0" class="app__empty">
@@ -28,41 +28,30 @@
       <h3>Количество комментариев: {{ lenghtComments }}</h3>
       <CommentList :comments="comments" @reply="showReplyDialog" />
     </section>
+    <Test v-model:show="testVisible" :content="testContent" />
   </main>
 </template>
   
 <script setup>
-import { computed, ref } from "vue";
 import CommentList from "@/components/CommentList.vue";
 import CommentForm from "@/components/CommentForm.vue";
+import Test from "@/components/Test.vue";
+import axios from "axios";
+import { computed, ref, watch, onMounted } from "vue";
 const parentCommentId = ref(null);
+const comments = ref([]);
+const testContent = ref({ status: "", message: "" });
+const testVisible = ref(false);
 const dialogVisible = ref(false);
-
-const comments = ref([
-  {
-    id: 1,
-    author: "Иван",
-    text: "текст",
-    reaction: 0,
-    parentId: null,
-  },
-  {
-    id: 2,
-    author: "sdfsdf",
-    text: "текст",
-    reaction: 0,
-    parentId: null,
-  },
-  {
-    id: 3,
-    author: "ssdfsdfsdgfghfghf",
-    text: "текст",
-    reaction: 0,
-    parentId: null,
-  },
-]);
+const evtSource = ref(null);
+const switchChecked = ref(true);
+const isAppSending = ref(false);
 
 const lenghtComments = computed(() => comments.value.length);
+
+function addComment(comment) {
+  comments.value.push(JSON.parse(comment.data));
+}
 
 function showReplyDialog(parentId) {
   parentCommentId.value = parentId;
@@ -70,16 +59,81 @@ function showReplyDialog(parentId) {
 }
 
 function showDialog() {
-  parentCommentId.value = null;
   dialogVisible.value = true;
 }
 
-function createComment(comment) {
-  comments.value.push(comment);
-  dialogVisible.value = false;
+async function fetchComments() {
+  try {
+    const response = await axios.get("http://194.67.93.117:80/comments");
+    comments.value.length = 0;
+    comments.value.push(...response.data.reverse());
+  } catch (error) {
+    console.log("Error fetching comments:", error);
+  }
 }
+
+async function postComments(comment) {
+  try {
+    isAppSending.value = true;
+    let url = "http://194.67.93.117:80/comments";
+    let commentbody = {
+      author: comment.author,
+      text: comment.text,
+      reaction: comment.reaction,
+      parentId: comment.parentId,
+    };
+
+    const headers = {
+      "Content-Type": "application/json",
+      Username: "xAksssenov",
+    };
+
+    const response = await axios.post(url, commentbody, { headers });
+
+    console.log(response.data);
+    testContent.value = response.data;
+    testVisible.value = true;
+    dialogVisible.value = false;
+    parentCommentId.value = null;
+  } catch (error) {
+    console.log(error.message);
+    testContent.value = { status: "Error", message: error.message };
+    testVisible.value = true;
+  }
+  isAppSending.value = false;
+}
+
+function openConnection() {
+  evtSource.value = new EventSource("http://194.67.93.117:80/comments/stream");
+  evtSource.value.onmessage = addComment;
+}
+
+function closeConnection() {
+  if (evtSource.value) {
+    evtSource.value.close();
+    evtSource.value = null;
+  }
+}
+
+function serverSentEvent() {
+  if (!switchChecked.value) {
+    closeConnection();
+  } else {
+    openConnection();
+  }
+}
+
+function parrentIdcheck() {
+  if (dialogVisible.value === false) {
+    parentCommentId.value = null;
+  }
+}
+
+watch(dialogVisible, parrentIdcheck);
+watch(switchChecked, serverSentEvent);
+fetchComments();
+onMounted(() => openConnection());
 </script>
-  
 <style>
 * {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -110,9 +164,9 @@ function createComment(comment) {
 }
 
 .app__block {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
 }
 
 .app__empty {
@@ -132,6 +186,6 @@ function createComment(comment) {
 }
 
 h3 {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 </style>  
