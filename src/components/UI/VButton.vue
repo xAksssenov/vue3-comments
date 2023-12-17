@@ -23,6 +23,11 @@ defineOptions({
   border: none;
 }
 
+@media(max-width: 500px) {
+  .btn {
+    font-size: 14px;
+  }
+}
 .btn:hover {
   cursor: pointer;
 }

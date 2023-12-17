@@ -149,6 +149,12 @@ onMounted(() => openConnection());
   margin: auto;
 }
 
+@media (max-width: 500px) {
+  .app {
+    font-size: 14px;
+  }
+}
+
 .app__main {
   text-align: center;
 }
@@ -177,8 +183,6 @@ onMounted(() => openConnection());
 
 .app__main__btn {
   margin: 15px auto;
-  justify-content: space-between;
-  width: 30%;
 }
 
 .app__btn {

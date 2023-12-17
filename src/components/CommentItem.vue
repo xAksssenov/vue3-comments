@@ -8,7 +8,7 @@
         <p>{{ comment.text }}</p>
       </div>
       <div class="comment__section">
-        <time>{{ dateNow }}</time>
+        <time>{{ convertDate }}</time>
         <VButton class="comment__btn" @click="showDialog">Ответить</VButton>
         <div class="comment__answer" v-if="childs">
           Ответы: {{ childs.length }}
@@ -46,53 +46,44 @@ const props = defineProps({
   },
 });
 
-const reactionSum = ref(0);
+const date = ref(props.comment.createdAt)
+const reactionSum = ref(0)
 const colorReaction = computed(() => {
-  if (!props.comment.childs) return;
+  if (!props.comment.childs) return
 
-  reactionSum.value = 0;
+  reactionSum.value = 0
   props.comment.childs.forEach((comment) => {
-    reactionSum.value += comment.reaction;
-  });
+    reactionSum.value += comment.reaction
+  })
   if (reactionSum.value > 0) {
-    return "comment__green";
+    return "comment__green"
   } else if (reactionSum.value < 0) {
-    return "comment__red";
+    return "comment__red"
   }
-  return;
-});
+  return
+})
 
 function showDialog() {
-  emit("showDialog", props.comment.id);
+  emit("showDialog", props.comment.id)
 }
 
 function showChildDialog(id) {
-  emit("showDialog", id);
+  emit("showDialog", id)
 }
 
 const nestMargin = computed(() => {
-  return props.comment.nest * 30;
-});
+  return props.comment.nest * 10
+})
 
-function dateTime() {
-  const current = new Date();
-  const date =
-    current.getFullYear() +
-    "-" +
-    (current.getMonth() + 1) +
-    "-" +
-    current.getDate();
-  const time =
-    current.getHours() +
-    ":" +
-    current.getMinutes() +
-    ":" +
-    current.getSeconds();
-  const dateTime = date + " " + time;
-  return dateTime;
-}
-
-const dateNow = dateTime();
+const convertDate = computed(() => {
+  return new Intl.DateTimeFormat('ru', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  }).format(Date.parse(date.value))
+})
 </script>
 
 <style scoped>
@@ -127,6 +118,27 @@ time {
 
 .comment__btn {
   width: 100%;
+}
+
+@media(max-width: 800px) {
+  .comment__btn {
+    width: 80%;
+  }
+
+  .comment__body {
+    font-size: 14px;
+    padding: 20px 20px;
+  }
+}
+
+@media(max-width: 500px) {
+  .comment__btn {
+    width: 90px;
+  }
+
+  time {
+    font-size: 12px;
+  }
 }
 
 li {
