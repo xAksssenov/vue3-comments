@@ -3,24 +3,31 @@
     <span class="switch__hidden">Переключатель</span>
     <input
       type="checkbox"
-      :checked="checked"
-      @input="updateCheck"
+      v-model="value"
       class="switch__hidden"
     />
     <span class="switch"></span>
   </label>
 </template>
   
-  <script setup>
+<script setup>
+import { computed } from 'vue'
 defineOptions({
   name: "VSwitch",
 });
 
+const emit = defineEmits(['update:modelValue'])
 const props = defineProps({
-  checked: Boolean,
-});
-
-const emit = defineEmits(["update:check"]);
+  modelValue: Boolean,
+})
+const value = computed({
+  get() {
+    return props.modelValue
+  },
+  set(value) {
+    emit('update:modelValue', value)
+  },
+})
 </script>
   
 <style scoped>
